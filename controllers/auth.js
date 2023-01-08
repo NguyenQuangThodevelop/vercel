@@ -1,5 +1,5 @@
 const User = require("../models/user");
-var bcrypt = require("bcrypt");
+
 exports.register = async (req, res, next) => {
   try {
     const email = req.body.email;
@@ -10,21 +10,21 @@ exports.register = async (req, res, next) => {
       if (userDoc) {
         return res.status(201).json("false");
       }
-      bcrypt.hash(password, 12).then((hashedPassword) => {
-        const user = new User({
-          email: email,
-          fullname: fullname,
-          phone: phone,
-          password: hashedPassword,
-        });
-        user.save();
+
+      const user = new User({
+        email: email,
+        fullname: fullname,
+        phone: phone,
+        password: hashedPassword,
       });
-      return res.status(200).json("true");
+      user.save();
     });
+    return res.status(200).json("true");
   } catch (err) {
     next(err);
   }
 };
+
 exports.singIn = async (req, res, next) => {
   try {
     const email = req.body.email;
@@ -33,19 +33,13 @@ exports.singIn = async (req, res, next) => {
       if (!user) {
         return res.status(201).json("faile");
       }
-      bcrypt.compare(password, user.password).then((doMatch) => {
-        if (doMatch) {
-          return res.status(200).json(user);
+      user.findOne({ password: password }).then((user) => {
+        if (!user) {
+          return res.status(201).json("faile");
         }
+        return res.status(200).json(user);
       });
     });
-  } catch (err) {
-    next(err);
-  }
-};
-exports.getSingIn = async (req, res, next) => {
-  try {
-    res.send(req.session.user);
   } catch (err) {
     next(err);
   }
