@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-
+const authRoute = require("./routes/auth");
 const productRoute = require("./routes/product");
 const userRoute = require("./routes/user");
 app.use(express.json({ extended: false }));
@@ -17,6 +17,7 @@ connect();
 
 app.use("/api/product", productRoute);
 app.use("/api/user", userRoute);
+app.use("/api/auth", authRoute);
 app.listen(PORT, () => {
   console.log(`sever is running in port ${PORT}`);
 });
