@@ -12,8 +12,8 @@ exports.register = async (req, res, next) => {
       const user = new User(req.body);
 
       user.save();
+      return res.status(200).json(user);
     });
-    return res.status(200).json("true");
   } catch (err) {
     next(err);
   }
