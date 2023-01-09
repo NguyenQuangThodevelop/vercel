@@ -22,16 +22,14 @@ exports.singIn = async (req, res, next) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
+
     User.findOne({ email: email }).then((user) => {
       if (!user) {
         return res.status(201).json("faile");
       }
-      user.findOne({ password: password }).the((user) => {
-        if (!user) {
-          return res.status(201).json("faile");
-        }
+      if (user.password === password) {
         return res.status(200).json(user);
-      });
+      }
     });
   } catch (err) {
     next(err);
