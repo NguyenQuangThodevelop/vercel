@@ -63,9 +63,11 @@ exports.deleteCart = async (req, res, next) => {
 };
 exports.postOrder = async (req, res, next) => {
   try {
-    console.log(req.body);
+    const user = await User.findById(req.body.userId);
+    //console.log(req.body);
     const newOrder = await new Order(req.body);
-    console.log(newOrder);
+    user.clearCart();
+    //console.log(newOrder);
     newOrder.save();
     transporter.sendMail({
       to: "thonqfx17090@funix.edu.vn",
