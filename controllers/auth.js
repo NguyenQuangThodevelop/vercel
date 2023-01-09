@@ -3,15 +3,14 @@ const User = require("../models/user");
 exports.register = async (req, res, next) => {
   try {
     const email = req.body.email;
-    const fullname = req.body.fullname;
-    const phone = req.body.phone;
-    const password = req.body.password;
+    console.log(req.body);
     User.findOne({ email: email }).then((userDoc) => {
       if (userDoc) {
         return res.status(201).json("false");
       }
 
       const user = new User(req.body);
+
       user.save();
     });
     return res.status(200).json("true");
